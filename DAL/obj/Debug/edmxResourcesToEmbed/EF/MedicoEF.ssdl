@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MedicoModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Admins">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="BloodDonors">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Grp" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="AdminId" Type="int" Nullable="false" />
+    <Property Name="DonorName" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Phone" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Doctors">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="AdminId" Type="int" Nullable="false" />
+    <Property Name="Specialization" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Patients">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Email" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Password" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="AminId" Type="int" Nullable="false" />
+    <Property Name="DoctorId" Type="int" />
+    <Property Name="UserId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Token">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TKey" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="CreatedAt" Type="datetime" Nullable="false" />
+    <Property Name="DelatedAt" Type="datetime" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserType" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="Password" Type="varchar" MaxLength="100" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Admins_Admins">
+    <End Role="Admins" Type="Self.Admins" Multiplicity="1" />
+    <End Role="Admins1" Type="Self.Admins" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Admins">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Admins1">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_BloodDonors_Admins">
+    <End Role="Admins" Type="Self.Admins" Multiplicity="1" />
+    <End Role="BloodDonors" Type="Self.BloodDonors" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Admins">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BloodDonors">
+        <PropertyRef Name="AdminId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Doctors_Admins">
+    <End Role="Admins" Type="Self.Admins" Multiplicity="1" />
+    <End Role="Doctors" Type="Self.Doctors" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Admins">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Doctors">
+        <PropertyRef Name="AdminId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Doctors_Doctors">
+    <End Role="Doctors" Type="Self.Doctors" Multiplicity="1" />
+    <End Role="Doctors1" Type="Self.Doctors" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Doctors">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Doctors1">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Doctors_Doctors1">
+    <End Role="Doctors" Type="Self.Doctors" Multiplicity="1" />
+    <End Role="Doctors1" Type="Self.Doctors" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Doctors">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Doctors1">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Doctors_Users">
+    <End Role="Users" Type="Self.Users" Multiplicity="1" />
+    <End Role="Doctors" Type="Self.Doctors" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Doctors">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Patients_Users">
+    <End Role="Users" Type="Self.Users" Multiplicity="1" />
+    <End Role="Patients" Type="Self.Patients" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Patients">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="MedicoModelStoreContainer">
+    <EntitySet Name="Admins" EntityType="Self.Admins" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="BloodDonors" EntityType="Self.BloodDonors" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Doctors" EntityType="Self.Doctors" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Patients" EntityType="Self.Patients" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Token" EntityType="Self.Token" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Admins_Admins" Association="Self.FK_Admins_Admins">
+      <End Role="Admins" EntitySet="Admins" />
+      <End Role="Admins1" EntitySet="Admins" />
+    </AssociationSet>
+    <AssociationSet Name="FK_BloodDonors_Admins" Association="Self.FK_BloodDonors_Admins">
+      <End Role="Admins" EntitySet="Admins" />
+      <End Role="BloodDonors" EntitySet="BloodDonors" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Doctors_Admins" Association="Self.FK_Doctors_Admins">
+      <End Role="Admins" EntitySet="Admins" />
+      <End Role="Doctors" EntitySet="Doctors" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Doctors_Doctors" Association="Self.FK_Doctors_Doctors">
+      <End Role="Doctors" EntitySet="Doctors" />
+      <End Role="Doctors1" EntitySet="Doctors" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Doctors_Doctors1" Association="Self.FK_Doctors_Doctors1">
+      <End Role="Doctors" EntitySet="Doctors" />
+      <End Role="Doctors1" EntitySet="Doctors" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Doctors_Users" Association="Self.FK_Doctors_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Doctors" EntitySet="Doctors" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Patients_Users" Association="Self.FK_Patients_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Patients" EntitySet="Patients" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

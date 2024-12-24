@@ -1,0 +1,254 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MedicoModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Admin">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="BloodDonors" Relationship="Self.FK_BloodDonors_Admins" FromRole="Admins" ToRole="BloodDonors" />
+    <NavigationProperty Name="Doctors" Relationship="Self.FK_Doctors_Admins" FromRole="Admins" ToRole="Doctors" />
+    <NavigationProperty Name="Patients" Relationship="Self.FK_Patients_Admins" FromRole="Admins" ToRole="Patients" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <Property Name="UserType" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="User" Relationship="MedicoModel.FK_Admins_Users" FromRole="Admin" ToRole="User" />
+    <NavigationProperty Name="Admins1" Relationship="MedicoModel.FK_Admins_Admins" FromRole="Admin" ToRole="Admin1" />
+    <NavigationProperty Name="Admin1" Relationship="MedicoModel.FK_Admins_Admins" FromRole="Admin1" ToRole="Admin" />
+  </EntityType>
+  <EntityType Name="BloodDonor">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Grp" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="AdminId" Type="Int32" Nullable="false" />
+    <Property Name="DonorName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Admin" Relationship="Self.FK_BloodDonors_Admins" FromRole="BloodDonors" ToRole="Admins" />
+  </EntityType>
+  <EntityType Name="Doctor">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="AdminId" Type="Int32" Nullable="false" />
+    <Property Name="Specialization" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="Admin" Relationship="Self.FK_Doctors_Admins" FromRole="Doctors" ToRole="Admins" />
+    <NavigationProperty Name="Patients" Relationship="Self.FK_Patients_Doctors" FromRole="Doctors" ToRole="Patients" />
+    <Property Name="UType" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Doctors1" Relationship="MedicoModel.FK_Doctors_Doctors" FromRole="Doctor" ToRole="Doctor1" />
+    <NavigationProperty Name="Doctor1" Relationship="MedicoModel.FK_Doctors_Doctors" FromRole="Doctor1" ToRole="Doctor" />
+    <NavigationProperty Name="Doctors11" Relationship="MedicoModel.FK_Doctors_Doctors1" FromRole="Doctor" ToRole="Doctor1" />
+    <NavigationProperty Name="Doctor2" Relationship="MedicoModel.FK_Doctors_Doctors1" FromRole="Doctor1" ToRole="Doctor" />
+    <NavigationProperty Name="User" Relationship="MedicoModel.FK_Doctors_Users" FromRole="Doctor" ToRole="User" />
+  </EntityType>
+  <EntityType Name="Patient">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="AminId" Type="Int32" Nullable="false" />
+    <Property Name="DoctorId" Type="Int32" />
+    <NavigationProperty Name="Admin" Relationship="Self.FK_Patients_Admins" FromRole="Patients" ToRole="Admins" />
+    <NavigationProperty Name="Doctor" Relationship="Self.FK_Patients_Doctors" FromRole="Patients" ToRole="Doctors" />
+    <Property Name="UserId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="User" Relationship="MedicoModel.FK_Patients_Users" FromRole="Patient" ToRole="User" />
+  </EntityType>
+  <Association Name="FK_BloodDonors_Admins">
+    <End Role="Admins" Type="Self.Admin" Multiplicity="1" />
+    <End Role="BloodDonors" Type="Self.BloodDonor" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Admins">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="BloodDonors">
+        <PropertyRef Name="AdminId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Doctors_Admins">
+    <End Role="Admins" Type="Self.Admin" Multiplicity="1" />
+    <End Role="Doctors" Type="Self.Doctor" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Admins">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Doctors">
+        <PropertyRef Name="AdminId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Patients_Admins">
+    <End Role="Admins" Type="Self.Admin" Multiplicity="1" />
+    <End Role="Patients" Type="Self.Patient" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Admins">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Patients">
+        <PropertyRef Name="AminId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Patients_Doctors">
+    <End Role="Doctors" Type="Self.Doctor" Multiplicity="0..1" />
+    <End Role="Patients" Type="Self.Patient" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Doctors">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Patients">
+        <PropertyRef Name="DoctorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="MedicoEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Admins" EntityType="Self.Admin" />
+    <EntitySet Name="BloodDonors" EntityType="Self.BloodDonor" />
+    <EntitySet Name="Doctors" EntityType="Self.Doctor" />
+    <EntitySet Name="Patients" EntityType="Self.Patient" />
+    <AssociationSet Name="FK_BloodDonors_Admins" Association="Self.FK_BloodDonors_Admins">
+      <End Role="Admins" EntitySet="Admins" />
+      <End Role="BloodDonors" EntitySet="BloodDonors" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Doctors_Admins" Association="Self.FK_Doctors_Admins">
+      <End Role="Admins" EntitySet="Admins" />
+      <End Role="Doctors" EntitySet="Doctors" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Patients_Admins" Association="Self.FK_Patients_Admins">
+      <End Role="Admins" EntitySet="Admins" />
+      <End Role="Patients" EntitySet="Patients" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Patients_Doctors" Association="Self.FK_Patients_Doctors">
+      <End Role="Doctors" EntitySet="Doctors" />
+      <End Role="Patients" EntitySet="Patients" />
+    </AssociationSet>
+    <EntitySet Name="Tokens" EntityType="MedicoModel.Token" />
+    <EntitySet Name="Users" EntityType="MedicoModel.User" />
+    <AssociationSet Name="FK_Admins_Users" Association="MedicoModel.FK_Admins_Users">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Admin" EntitySet="Admins" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Doctors_Doctors" Association="MedicoModel.FK_Doctors_Doctors">
+      <End Role="Doctor" EntitySet="Doctors" />
+      <End Role="Doctor1" EntitySet="Doctors" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Doctors_Doctors1" Association="MedicoModel.FK_Doctors_Doctors1">
+      <End Role="Doctor" EntitySet="Doctors" />
+      <End Role="Doctor1" EntitySet="Doctors" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Doctors_Users" Association="MedicoModel.FK_Doctors_Users">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Doctor" EntitySet="Doctors" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Admins_Admins" Association="MedicoModel.FK_Admins_Admins">
+      <End Role="Admin" EntitySet="Admins" />
+      <End Role="Admin1" EntitySet="Admins" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Patients_Users" Association="MedicoModel.FK_Patients_Users">
+      <End Role="User" EntitySet="Users" />
+      <End Role="Patient" EntitySet="Patients" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Token">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TKey" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="CreatedAt" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="DelatedAt" Type="DateTime" Precision="3" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserType" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Password" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="Admins" Relationship="MedicoModel.FK_Admins_Users" FromRole="User" ToRole="Admin" />
+    <NavigationProperty Name="Doctors" Relationship="MedicoModel.FK_Doctors_Users" FromRole="User" ToRole="Doctor" />
+    <NavigationProperty Name="Patients" Relationship="MedicoModel.FK_Patients_Users" FromRole="User" ToRole="Patient" />
+  </EntityType>
+  <Association Name="FK_Admins_Users">
+    <End Type="MedicoModel.User" Role="User" Multiplicity="1" />
+    <End Type="MedicoModel.Admin" Role="Admin" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Admin">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Doctors_Doctors">
+    <End Type="MedicoModel.Doctor" Role="Doctor" Multiplicity="1" />
+    <End Type="MedicoModel.Doctor" Role="Doctor1" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Doctor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Doctor1">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Doctors_Doctors1">
+    <End Type="MedicoModel.Doctor" Role="Doctor" Multiplicity="1" />
+    <End Type="MedicoModel.Doctor" Role="Doctor1" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Doctor">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Doctor1">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Doctors_Users">
+    <End Type="MedicoModel.User" Role="User" Multiplicity="1" />
+    <End Type="MedicoModel.Doctor" Role="Doctor" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Doctor">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Admins_Admins">
+    <End Type="MedicoModel.Admin" Role="Admin" Multiplicity="1" />
+    <End Type="MedicoModel.Admin" Role="Admin1" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Admin">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Admin1">
+        <PropertyRef Name="Id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Patients_Users">
+    <End Type="MedicoModel.User" Role="User" Multiplicity="1" />
+    <End Type="MedicoModel.Patient" Role="Patient" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="User">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Patient">
+        <PropertyRef Name="UserId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
